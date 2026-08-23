@@ -1,122 +1,232 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import ChessBoard from "./components/ChessBoard";
+import GameInfo from "./components/GameInfo";
+import MoveHistory from "./components/MoveHistory";
+import CapturedPieces from "./components/CapturedPieces";
+import { initialBoard } from "./data/initialBoard";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [board, setBoard] = useState(initialBoard);
+  const [selected, setSelected] = useState(null);
+  const [turn, setTurn] = useState("White");
+  const [moveCount, setMoveCount] = useState(0);
+  const [moveHistory, setMoveHistory] = useState([]);
+  const [capturedWhite, setCapturedWhite] = useState([]);
+  const [capturedBlack, setCapturedBlack] = useState([]);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Select/Move using Click
+
+  function handleSquareClick(x, y) {
+    const piece = board[y][x];
+
+    // If no piece is selected
+    if (!selected) {
+      if (piece === null) {
+        return;
+      }
+
+      const isWhitePiece = piece.endsWith("-w");
+
+      const isCorrectTurn =
+        (turn === "White" && isWhitePiece) ||
+        (turn === "Black" && !isWhitePiece);
+
+      if (!isCorrectTurn) {
+        alert(`It is ${turn}'s turn!`);
+        return;
+      }
+
+      setSelected({
+        x: x,
+        y: y,
+      });
+
+      return;
+    }
+
+    // If a piece is already selected
+    movePiece(selected.x, selected.y, x, y);
+  }
+
+  /* Move Piece :p */
+
+  function movePiece(fromX, fromY, toX, toY) {
+    const piece = board[fromY][fromX];
+
+    if (!piece) {
+      return;
+    }
+
+    // Check piece color
+    const isWhitePiece = piece.endsWith("-w");
+
+    // Check whose turn it is
+    const isCorrectTurn =
+      (turn === "White" && isWhitePiece) || (turn === "Black" && !isWhitePiece);
+
+    if (!isCorrectTurn) {
+      alert(`It is ${turn}'s turn!`);
+      setSelected(null);
+      return;
+    }
+
+    // X-Y direction
+    const dx = toX - fromX;
+    const dy = toY - fromY;
+
+    const capturedPiece = board[toY][toX];
+
+    if (capturedPiece) {
+      if (capturedPiece.endsWith("-w")) {
+        setCapturedWhite((previous) => [...previous, capturedPiece]);
+      } else {
+        setCapturedBlack((previous) => [...previous, capturedPiece]);
+      }
+    }
+
+    const move = {
+      piece: piece,
+      fromX: fromX,
+      fromY: fromY,
+      toX: toX,
+      toY: toY,
+      dx: dx,
+      dy: dy,
+    };
+
+    setMoveHistory((previousHistory) => [...previousHistory, move]);
+
+    console.log("Piece:", piece);
+    console.log("From X:", fromX);
+    console.log("From Y:", fromY);
+    console.log("To X:", toX);
+    console.log("To Y:", toY);
+    console.log("X direction:", dx);
+    console.log("Y direction:", dy);
+
+    // Copy the board
+    const newBoard = board.map((row) => [...row]);
+
+    // Move / capture
+    newBoard[toY][toX] = piece;
+    newBoard[fromY][fromX] = null;
+
+    // Update board
+    setBoard(newBoard);
+
+    // Change turn
+    setTurn((currentTurn) => (currentTurn === "White" ? "Black" : "White"));
+
+    // Increase moves
+    setMoveCount((currentCount) => currentCount + 1);
+
+    // Clear selection
+    setSelected(null);
+  }
+
+  /*Drag Start*/
+
+  function handleDragStart(e, x, y) {
+    const piece = board[y][x];
+
+    if (!piece) {
+      return;
+    }
+
+    const isWhitePiece = piece.endsWith("-w");
+
+    const isCorrectTurn =
+      (turn === "White" && isWhitePiece) || (turn === "Black" && !isWhitePiece);
+
+    if (!isCorrectTurn) {
+      e.preventDefault();
+      alert(`It is ${turn}'s turn!`);
+      return;
+    }
+
+    setSelected({
+      x: x,
+      y: y,
+    });
+
+    e.dataTransfer.setData("text/plain", `${x},${y}`);
+  }
+  // -----------------------------
+  // ALLOW DROP
+  // -----------------------------
+
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  // -----------------------------
+  // DROP PIECE
+  // -----------------------------
+
+  function handleDrop(e, toX, toY) {
+    e.preventDefault();
+
+    const data = e.dataTransfer.getData("text/plain");
+
+    if (!data) {
+      return;
+    }
+
+    const [fromX, fromY] = data.split(",").map(Number);
+
+    movePiece(fromX, fromY, toX, toY);
+  }
+
+  // -----------------------------
+  // RESTART
+  // -----------------------------
+
+  function restartGame() {
+    setBoard(initialBoard.map((row) => [...row]));
+
+    setSelected(null);
+
+    setTurn("White");
+
+    setMoveCount(0);
+
+    setMoveHistory([]);
+
+    setCapturedWhite([]);
+
+    setCapturedBlack([]);
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+    <div className="app">
+      <GameInfo turn={turn} moveCount={moveCount} onRestart={restartGame} />
+
+      <ChessBoard
+        board={board}
+        isFlipped={isFlipped}
+        selected={selected}
+        onSquareClick={handleSquareClick}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      />
+
+      <div className="board-controls">
+        <button onClick={() => setIsFlipped((current) => !current)}>
+          🔄 Flip Board
         </button>
-      </section>
+      </div>
 
-      <div className="ticks"></div>
+      <MoveHistory moveHistory={moveHistory} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <CapturedPieces
+        capturedWhite={capturedWhite}
+        capturedBlack={capturedBlack}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
