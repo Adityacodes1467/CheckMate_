@@ -3,7 +3,7 @@ function GameInfo({ turn, moveCount, onRestart }) {
     return (
         <div className="game-info">
 
-            <h1>♟ Chess Arena</h1>
+            <h1>♟ CheckMate</h1>
 
             <div className="status">
 
