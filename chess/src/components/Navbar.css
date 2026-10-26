@@ -1,0 +1,228 @@
+.navbar {
+    border-bottom: 1px solid var(--line);
+    background: var(--ink);
+}
+
+.navbar-inner {
+    max-width: var(--max-width);
+    height: 72px;
+    margin: 0 auto;
+    padding: 0 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* =========================
+   BRAND: a tiny 2x2 board + wordmark
+========================= */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    color: var(--paper);
+    text-decoration: none;
+}
+
+.brand-mark {
+    width: 22px;
+    height: 22px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    border: 1.5px solid var(--brass);
+}
+
+.brand-mark span:nth-child(1),
+.brand-mark span:nth-child(4) {
+    background: var(--brass);
+}
+
+.brand-name {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.brand-name em {
+    color: var(--brass);
+    font-style: italic;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-link {
+    position: relative;
+    padding: 6px 0;
+
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+
+    transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--paper);
+}
+
+/* Underline that grows under the active link */
+.nav-link::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 0;
+    height: 1.5px;
+
+    background: var(--brass);
+    transition: width 0.25s;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-play {
+    padding: 9px 18px;
+
+    border: 1.5px solid var(--brass);
+    border-radius: 3px;
+
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brass);
+    text-decoration: none;
+
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-play:hover,
+.nav-play.active {
+    background: var(--brass);
+    color: var(--ink);
+}
+
+.menu-toggle {
+    display: none;
+
+    padding: 8px 14px;
+
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--paper);
+
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    cursor: pointer;
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+@media (max-width: 760px) {
+    .navbar {
+        position: relative;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        z-index: 50;
+
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+
+        padding: 24px;
+
+        background: var(--ink-2);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+}
+
+
+/* Shared player profile from Context API */
+.nav-player {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--paper);
+    text-decoration: none;
+    font-size: 12px;
+    max-width: 160px;
+}
+
+.nav-player.active,
+.nav-player:hover {
+    color: var(--brass);
+}
+
+.nav-player-avatar {
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--brass);
+    border-radius: 50%;
+    color: var(--brass);
+    background: var(--brass-soft);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.nav-player-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100px;
+}
+
+@media (max-width: 760px) {
+    .nav-player {
+        padding-top: 8px;
+    }
+
+    .nav-player-name {
+        max-width: 180px;
+    }
+}
