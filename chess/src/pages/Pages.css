@@ -1,0 +1,249 @@
+/* Shared styles for the Rules, About and 404 pages */
+
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 64px 24px 0;
+}
+
+.page-header {
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--line);
+}
+
+.page-header h1 {
+    margin: 14px 0 16px;
+    font-size: clamp(38px, 6vw, 64px);
+    line-height: 1.05;
+}
+
+.page-header p {
+    max-width: 640px;
+    margin: 0;
+
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.page-section {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.page-section:last-child {
+    border-bottom: none;
+}
+
+.page-section > h2 {
+    margin: 0 0 28px;
+    font-size: 32px;
+}
+
+.page-section.center {
+    text-align: center;
+}
+
+/* =========================
+   RULES PAGE
+========================= */
+
+.piece-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 48px;
+}
+
+.piece-card {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+}
+
+.piece-card h3,
+.rule h3 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.piece-card p,
+.rule p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.piece-images {
+    flex-shrink: 0;
+    display: flex;
+
+    padding: 6px;
+    background: var(--board-light);
+    border: 2px solid var(--paper);
+}
+
+.piece-images img {
+    width: 40px;
+    height: 40px;
+}
+
+.piece-value {
+    margin-left: 12px;
+
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brass);
+}
+
+.rule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0 48px;
+}
+
+.rule {
+    padding: 22px 0 22px 20px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--brass);
+}
+
+.tips {
+    margin: 0 0 32px;
+    padding: 0;
+    list-style: none;
+
+    counter-reset: tip;
+}
+
+.tips li {
+    position: relative;
+    padding: 10px 0 10px 40px;
+
+    color: var(--muted);
+    line-height: 1.6;
+
+    counter-increment: tip;
+}
+
+.tips li::before {
+    content: counter(tip, decimal-leading-zero);
+
+    position: absolute;
+    left: 0;
+
+    font-family: var(--font-mono);
+    color: var(--brass);
+}
+
+/* =========================
+   ABOUT PAGE
+========================= */
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.team-card {
+    padding: 28px 24px;
+
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 6px 6px 0 var(--ink-3);
+}
+
+.team-number {
+    font-family: var(--font-display);
+    font-size: 44px;
+    line-height: 1;
+    color: #a88136;
+}
+
+.team-card h3 {
+    margin: 14px 0 6px;
+    font-size: 26px;
+}
+
+.team-card p {
+    margin: 0;
+    color: #4a4538;
+    line-height: 1.55;
+}
+
+.spec-list {
+    margin: 0;
+}
+
+.spec-list div {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 16px;
+
+    padding: 18px 0;
+    border-bottom: 1px dashed var(--line);
+}
+
+.spec-list dt {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--brass);
+}
+
+.spec-list dd {
+    margin: 0;
+    color: var(--muted);
+}
+
+/* =========================
+   404
+========================= */
+
+.not-found {
+    min-height: 60vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.not-found-icon {
+    width: 88px;
+    margin-bottom: 20px;
+    transform: rotate(90deg);
+}
+
+.not-found h1 {
+    margin: 12px 0 10px;
+    font-size: clamp(36px, 6vw, 56px);
+}
+
+.not-found p {
+    margin: 0 0 28px;
+    color: var(--muted);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 760px) {
+    .piece-grid,
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .spec-list div {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+}
