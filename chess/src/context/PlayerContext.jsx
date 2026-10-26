@@ -52,7 +52,7 @@ export function PlayerProvider({ children }) {
 
   return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;
 }
-
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePlayer() {
   const context = useContext(PlayerContext);
   if (!context) {
