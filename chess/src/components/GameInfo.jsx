@@ -1,27 +1,24 @@
-function GameInfo({ turn, moveCount, onRestart }) {
+function GameInfo({ turn, moveCount, status }) {
+
+    const statusClass = status.isOver
+        ? "game-info over"
+        : status.inCheck
+            ? "game-info check"
+            : "game-info";
 
     return (
-        <div className="game-info">
+        <div className={statusClass}>
 
-            <h1>♟ CheckMate</h1>
+            <span className="label">Game status</span>
+
+            <h2 className="status-title">{status.title}</h2>
+
+            {status.text && <p className="status-text">{status.text}</p>}
 
             <div className="status">
-
-                <p>
-                    Turn:
-                    <strong>{turn}</strong>
-                </p>
-
-                <p>
-                    Moves:
-                    <strong>{moveCount}</strong>
-                </p>
-
+                <span>Turn <strong>{turn}</strong></span>
+                <span>Moves <strong>{moveCount}</strong></span>
             </div>
-
-            <button onClick={onRestart}>
-                Restart Game
-            </button>
 
         </div>
     );
