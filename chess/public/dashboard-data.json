@@ -1,0 +1,55 @@
+{
+  "stats": [
+    {
+      "id": "routes",
+      "label": "Website routes",
+      "value": "6",
+      "detail": "Home, Play, Rules, About, Dashboard and Not Found"
+    },
+    {
+      "id": "engine",
+      "label": "Rules engine",
+      "value": "chess.js",
+      "detail": "Legal moves and chess status are validated by the engine"
+    },
+    {
+      "id": "state",
+      "label": "State examples",
+      "value": "3",
+      "detail": "Local component state, Context API and Zustand"
+    },
+    {
+      "id": "forms",
+      "label": "Reusable forms",
+      "value": "1",
+      "detail": "A profile form with field-level validation and feedback"
+    }
+  ],
+  "features": [
+    {
+      "id": "legal-moves",
+      "title": "Legal chess moves",
+      "description": "The chess rules engine validates each move, including special moves and game-ending positions."
+    },
+    {
+      "id": "navigation",
+      "title": "Multi-page SPA",
+      "description": "React Router changes between website pages without a full browser reload."
+    },
+    {
+      "id": "context",
+      "title": "Shared player profile",
+      "description": "Context API shares the profile between the Dashboard and navigation bar."
+    },
+    {
+      "id": "zustand",
+      "title": "Asynchronous dashboard data",
+      "description": "Zustand stores loading, success data, and error status for the local JSON request."
+    },
+    {
+      "id": "forms",
+      "title": "Reusable validated fields",
+      "description": "The profile form validates name and email and displays actionable field errors."
+    }
+  ]
+}
